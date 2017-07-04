@@ -31,6 +31,7 @@ export default {
 .leftnav {
     height: 100%;
     width: 5%;
+    float: left;
     .el-row{
       height: inherit;
       .el-col{
