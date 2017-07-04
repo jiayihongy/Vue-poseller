@@ -19,7 +19,7 @@ export default {
 <style scoped lang="scss">
   .main{
     h1{
-      font-size: 500px;
+      font-size: 50px;
 
     }
   }
