@@ -33,11 +33,31 @@
       <div class="goodslist">
         <div class="title">常点商品</div>
         <ul>
-          <li>
-            <span>香辣鸡腿堡</span>
-            <span>￥15</span>
+          <li v-for="good in goods">
+            <span>{{good.goodsName}}</span>
+            <span>￥{{good.price}}</span>
           </li>
         </ul>
+      </div>
+      <div class="goodsdetail">
+        <el-tabs>
+          <el-tab-pane label="汉堡">
+            <ul>
+              <li v-for="hanbao in goodstyle1">
+                <div class="left-img">
+                  <img :src="hanbao.goodsImg" alt="">
+                </div>
+                <div class="right-price">
+                  <p>{{hanbao.goodsName}}</p>
+                  <p>￥{{hanbao.price}}</p>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="小食"></el-tab-pane>
+          <el-tab-pane label="饮料"></el-tab-pane>
+          <el-tab-pane label="套餐"></el-tab-pane>
+        </el-tabs>
       </div>
     </el-col>
   </el-row>
@@ -45,6 +65,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'main',
   data() {
@@ -67,6 +88,25 @@ export default {
         count: 1
       }]
     }
+  },
+  created(){
+    axios.get('http://jspang.com/DemoApi/oftenGoods.php')
+    .then(res=>{
+      this.goods = res.data;
+    })
+    .catch(err=>{
+      alert('狗屁不通!')
+    });
+    axios.get('http://jspang.com/DemoApi/typeGoods.php')
+    .then(res=>{
+      this.goodstyle1 = res.data[0];
+      this.goodstyle2 = res.data[1];
+      this.goodstyle3 = res.data[2];
+      this.goodstyle4 = res.data[3];
+    })
+    .catch(err=>{
+      alert('狗屁不通!')
+    });
   }
 }
 </script>
@@ -93,13 +133,35 @@ export default {
         li{
           float: left;
           padding: 10px;
-          background-color: #EFF2F7;
+          background-color:#d4d4d4;
           border-radius: 4px;
+          margin-left: 10px;
+          margin-top: 10px;
+          color:rgb(68, 68, 68);
           span:last-child{
             color:#FF4949;
           }
         }
       }
     }
+    .goodsdetail{
+      clear: both;
+      ul{
+        list-style: none;
+        li{
+          float: left;
+          .left-img{
+            float: left;
+            img{
+              width: 100px;
+            }
+          }
+          .right-price{
+            float: left;
+          }
+        }
+      }
+    }
+
 }
 </style>
