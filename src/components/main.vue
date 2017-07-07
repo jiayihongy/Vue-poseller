@@ -86,7 +86,12 @@ export default {
         goodsName: '甜筒',
         price: 8,
         count: 1
-      }]
+      }],
+      goods:[],
+      goodstyle1:[],
+      goodstyle2:[],
+      goodstyle3:[],
+      goodstyle4:[]
     }
   },
   created(){
