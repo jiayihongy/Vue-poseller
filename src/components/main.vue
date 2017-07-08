@@ -43,7 +43,7 @@
         <el-tabs>
           <el-tab-pane label="汉堡">
             <ul>
-              <li v-for="hanbao in goodstyle1">
+              <li v-for="hanbao in goodstyle1" @click="addToList()">
                 <div class="left-img">
                   <img :src="hanbao.goodsImg" alt="">
                 </div>
@@ -54,9 +54,45 @@
               </li>
             </ul>
           </el-tab-pane>
-          <el-tab-pane label="小食"></el-tab-pane>
-          <el-tab-pane label="饮料"></el-tab-pane>
-          <el-tab-pane label="套餐"></el-tab-pane>
+          <el-tab-pane label="小食">
+            <ul>
+              <li v-for="hanbao in goodstyle2">
+                <div class="left-img">
+                  <img :src="hanbao.goodsImg" alt="">
+                </div>
+                <div class="right-price">
+                  <p>{{hanbao.goodsName}}</p>
+                  <p>￥{{hanbao.price}}</p>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="饮料">
+            <ul>
+              <li v-for="hanbao in goodstyle3">
+                <div class="left-img">
+                  <img :src="hanbao.goodsImg" alt="">
+                </div>
+                <div class="right-price">
+                  <p>{{hanbao.goodsName}}</p>
+                  <p>￥{{hanbao.price}}</p>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="套餐">
+            <ul>
+              <li v-for="hanbao in goodstyle4">
+                <div class="left-img">
+                  <img :src="hanbao.goodsImg" alt="">
+                </div>
+                <div class="right-price">
+                  <p>{{hanbao.goodsName}}</p>
+                  <p>￥{{hanbao.price}}</p>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </el-col>
@@ -70,28 +106,20 @@ export default {
   name: 'main',
   data() {
     return {
-      tableData: [{
-        goodsName: '可口可乐',
-        price: 8,
-        count: 1
-      }, {
-        goodsName: '香辣鸡腿堡',
-        price: 15,
-        count: 1
-      }, {
-        goodsName: '爱心薯条',
-        price: 8,
-        count: 1
-      }, {
-        goodsName: '甜筒',
-        price: 8,
-        count: 1
-      }],
+      tableData: [{goodsName:'卡水电费',count:5,price:50}],
       goods:[],
       goodstyle1:[],
       goodstyle2:[],
       goodstyle3:[],
       goodstyle4:[]
+    }
+  },
+  methods:{
+    addToList(){
+      // this.tableData.push
+      this.goods.forEach(function(val){
+        console.log(val.goodsName)
+      })
     }
   },
   created(){
@@ -138,11 +166,12 @@ export default {
         li{
           float: left;
           padding: 10px;
-          background-color:#d4d4d4;
+          border: 1px solid rgb(176, 176, 176);
           border-radius: 4px;
           margin-left: 10px;
           margin-top: 10px;
           color:rgb(68, 68, 68);
+          cursor: pointer;
           span:last-child{
             color:#FF4949;
           }
@@ -155,14 +184,26 @@ export default {
         list-style: none;
         li{
           float: left;
+          background: linear-gradient(to top, rgb(249, 255, 133) , rgb(246, 252, 216));
+          margin: 10px;
+          padding: 4px;
+          border-radius: 4px;
+          width: 23%;
+          cursor:pointer;
           .left-img{
             float: left;
+            border-radius: 10px;
+            width: 40%;
+            font-size: 0;
             img{
-              width: 100px;
+              border-radius: 4px;
+              width: 100%;
+              height: 100%;
             }
           }
           .right-price{
             float: left;
+            width: 60%;
           }
         }
       }
