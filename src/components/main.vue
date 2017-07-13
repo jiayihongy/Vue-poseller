@@ -10,15 +10,19 @@
             <el-table-column prop="price" label="金额" width="70"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template scope="scope">
-                <el-button type="text" size="small">增加</el-button>
-                <el-button type="text" size="small">删除</el-button>
+                <el-button type="text" size="small" @click="addToList(scope.row)">增加</el-button>
+                <el-button type="text" size="small" @click="removeList(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
+          <div class="zongshu">
+            <small>总计：</small><span>{{allCount}}</span>
+            <small>总价：</small><span>{{allPrice}}</span>
+          </div>
           <div class="buttons">
             <el-button type="warning">挂单</el-button>
-            <el-button type="danger">删除</el-button>
-            <el-button type="success">结账</el-button>
+            <el-button type="danger" @click="removeAllList">重选</el-button>
+            <el-button type="success" @click="checkOut">结账</el-button>
           </div>
         </el-tab-pane>
         <el-tab-pane label="挂单">
@@ -33,7 +37,7 @@
       <div class="goodslist">
         <div class="title">常点商品</div>
         <ul>
-          <li v-for="good in goods">
+          <li v-for="good in goods" @click="addToList(good)">
             <span>{{good.goodsName}}</span>
             <span>￥{{good.price}}</span>
           </li>
@@ -43,7 +47,7 @@
         <el-tabs>
           <el-tab-pane label="汉堡">
             <ul>
-              <li v-for="hanbao in goodstyle1" @click="addToList()">
+              <li v-for="hanbao in goodstyle1" @click="addToList(hanbao)">
                 <div class="left-img">
                   <img :src="hanbao.goodsImg" alt="">
                 </div>
@@ -56,7 +60,7 @@
           </el-tab-pane>
           <el-tab-pane label="小食">
             <ul>
-              <li v-for="hanbao in goodstyle2">
+              <li v-for="hanbao in goodstyle2" @click="addToList(hanbao)">
                 <div class="left-img">
                   <img :src="hanbao.goodsImg" alt="">
                 </div>
@@ -69,7 +73,7 @@
           </el-tab-pane>
           <el-tab-pane label="饮料">
             <ul>
-              <li v-for="hanbao in goodstyle3">
+              <li v-for="hanbao in goodstyle3" @click="addToList(hanbao)">
                 <div class="left-img">
                   <img :src="hanbao.goodsImg" alt="">
                 </div>
@@ -82,7 +86,7 @@
           </el-tab-pane>
           <el-tab-pane label="套餐">
             <ul>
-              <li v-for="hanbao in goodstyle4">
+              <li v-for="hanbao in goodstyle4" @click="addToList(hanbao)">
                 <div class="left-img">
                   <img :src="hanbao.goodsImg" alt="">
                 </div>
@@ -106,20 +110,59 @@ export default {
   name: 'main',
   data() {
     return {
-      tableData: [{goodsName:'卡水电费',count:5,price:50}],
+      tableData: [],
       goods:[],
       goodstyle1:[],
       goodstyle2:[],
       goodstyle3:[],
-      goodstyle4:[]
+      goodstyle4:[],
+      allPrice:0,
+      allCount:0
     }
   },
   methods:{
-    addToList(){
-      // this.tableData.push
-      this.goods.forEach(function(val){
-        console.log(val.goodsName)
+    addToList(data){
+      var ishave = false;
+      //判断库里有没有这个商品
+      for(let i = 0;i<this.tableData.length;i++){
+        if(this.tableData[i].goodsName == data.goodsName){
+          ishave = true;
+        }
+      }
+      //如果有，则数量加加，如果没有，这新增一个
+      if(ishave){
+        let arr = this.tableData.filter(o => o.goodsName == data.goodsName);
+        arr[0].count++;
+      }else{
+        let newGood = {goodsName:data.goodsName,count:1,price:data.price};
+        this.tableData.push(newGood);
+      }
+      this.countList();
+
+
+    },
+    removeList(data){
+      this.tableData = this.tableData.filter(o => o.goodsName !== data.goodsName);
+      this.countList();
+    },
+    countList(){
+      this.allPrice = 0;
+      this.allCount = 0;
+      this.tableData.forEach(o => {
+        this.allCount += o.count ;
+        this.allPrice = this.allPrice + (o.count*o.price);
       })
+    },
+    removeAllList(){
+      this.tableData.length = 0;
+      this.allPrice = 0;
+      this.allCount = 0;
+    },
+    checkOut(){
+      this.$message({
+          message: '点餐成功，请耐心等待哟~',
+          type: 'success'
+        });
     }
   },
   created(){
@@ -149,6 +192,14 @@ export default {
 .main {
     .buttons{
       margin-top: 10px;
+    }
+    .zongshu{
+      background-color: rgb(133, 133, 133);
+      color:#fff;
+      padding:4px;
+      span:nth-of-type(1){
+        margin-right: 50px;
+      }
     }
     .goodslist{
       .title{
